@@ -20,12 +20,34 @@ class HomeScreen extends StatefulWidget {
 
 class _HomeScreenState extends State<HomeScreen> {
   int _selectedIndex = 0;
-
+  bool _isSearching = false;
+  String _searchQuery = '';
   void _onItemTapped(int index) {
     setState(() {
       _selectedIndex = index;
     });
   }
+
+  void _startSearch() {
+    setState(() {
+      _isSearching = true;
+      _searchQuery = ' ';
+    });
+  }
+
+  void _stopSearch() {
+    setState(() {
+      _isSearching = false;
+      _searchQuery = '';
+    });
+  }
+
+  void _updateSearchQuery(String newQuery) {
+    setState(() {
+      _searchQuery = newQuery;
+    });
+  }
+
   
   final List<Widget> _pages = [
       HomeContent(),
@@ -124,14 +146,25 @@ class _HomeScreenState extends State<HomeScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text(' '),
+        title: _isSearching
+            ? TextField(
+          autofocus: true,
+          decoration: InputDecoration(
+            hintText: 'Search...',
+            border: InputBorder.none,
+          ),
+          onChanged: _updateSearchQuery,
+        )
+            : Text('Shop'),
         actions: [
-          IconButton(
-            icon: Icon(Icons.shopping_cart),
-            onPressed: () {
-              fetchUser(_username!);
-              // Navigate to the cart
-            },
+          _isSearching
+              ? IconButton(
+            icon: Icon(Icons.clear),
+            onPressed: _stopSearch,
+          )
+              : IconButton(
+            icon: Icon(Icons.search),
+            onPressed: _startSearch,
           ),
           IconButton(
             icon: Icon(Icons.logout),
