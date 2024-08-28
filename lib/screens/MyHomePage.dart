@@ -5,6 +5,8 @@ import 'package:btl_sem4/model/common.dart';
 import 'package:btl_sem4/model/user.dart';
 import 'package:btl_sem4/screens/AccountDetail.dart';
 import 'package:btl_sem4/screens/HomeContent.dart';
+import 'package:btl_sem4/screens/Notification.dart';
+import 'package:btl_sem4/screens/ProductDetail.dart';
 import 'package:btl_sem4/screens/login.dart';
 import 'package:btl_sem4/services/CategoryService.dart';
 import 'package:flutter/material.dart';
@@ -52,8 +54,8 @@ class _HomeScreenState extends State<HomeScreen> {
   final List<Widget> _pages = [
       HomeContent(),
       AccountDetail(),
-      Text("Trang 3"),
-      Text("Trang 4"),
+      NotificationPage(),
+      ProductDetailScreen(),
   ];
 
   final List<String> imgList = [
@@ -381,8 +383,8 @@ class _HomeScreenState extends State<HomeScreen> {
             label: 'Category',
           ),
           BottomNavigationBarItem(
-            icon: Icon(Icons.supervised_user_circle_rounded),
-            label: 'Account',
+            icon: Icon(Icons.notification_add),
+            label: 'Notification',
           ),
           BottomNavigationBarItem(
             icon: Icon(Icons.book),
