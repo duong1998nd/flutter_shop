@@ -1,5 +1,9 @@
+import 'dart:convert';
+
+import 'package:btl_sem4/model/common.dart';
 import 'package:btl_sem4/screens/login.dart';
 import 'package:flutter/material.dart';
+import 'package:http/http.dart' as http;
 
 class RegisterScreen extends StatefulWidget {
   @override
@@ -28,20 +32,50 @@ class _RegisterScreenState extends State<RegisterScreen> {
       _phoneError = _phoneController.text.isEmpty ? 'Hay nhap mat khau' : null;
 
       if (_fullnameError ==null && _emailError == null && _usernameError == null && _passwordError == null && _phoneError == null ) {
-        // Proceed with login if there are no errors
         _register();
       }
     });
   }
-  void _register() {
+  void _register() async {
     if (_formKey.currentState!.validate()) {
-      // Perform registration logic here
-      print('Full Name: ${_fullNameController.text}');
-      print('Email: ${_emailController.text}');
-      print('Username: ${_usernameController.text}');
-      print('Password: ${_passwordController.text}');
-      print('Phone: ${_phoneController.text}');
-      // You can also navigate to the next screen after successful registration
+      final userData = {
+        'fullName': _fullNameController.text,
+        'email': _emailController.text,
+        'username': _usernameController.text,
+        'password': _passwordController.text,
+        'phone': _phoneController.text,
+      };
+
+      final response = await http.post(
+        Uri.parse('${Common.domain}/api/account/register?fullname=${_fullNameController.text}&email=${_emailController.text}&username=${_usernameController.text}&password=${_passwordController.text}&phone=${_phoneController.text}'),
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: jsonEncode(userData),
+      );
+
+      if (response.statusCode == 200) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(
+            content: Text('Tạo tài khoản thành công!'),
+          ),
+        );
+
+        Future.delayed(Duration(seconds: 2), () {
+          if (context.mounted) {
+            Navigator.pushReplacement(
+              context,
+              MaterialPageRoute(builder: (context) => LoginScreen()),
+            );
+          }
+        });
+      } else {
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(
+            content: Text('Chưa thêm được!'),
+          ),
+        );
+      }
     }
   }
 
@@ -69,7 +103,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
             ),
           ),
         ),
-        title: Text('ABC Shop'),
+        title: Text('Book Shop'),
         centerTitle: true,
       ),
       body: SingleChildScrollView(
@@ -184,7 +218,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                         child: Padding(
                           padding: const EdgeInsets.only(top: 20.0),
                           child: ElevatedButton(
-                              child: Text( 'Dang ky',
+                              child: Text( 'Đăng ký',
                                 style: TextStyle(color: Colors.black87, fontSize: 20),
                               ),
                               onPressed: _validateBeforeRegister

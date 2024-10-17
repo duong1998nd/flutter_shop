@@ -51,7 +51,11 @@ dev_dependencies:
   jwt_decoder: ^2.0.1
   carousel_slider: ^4.0.0
   google_fonts: ^6.2.1
-
+  image_picker: ^0.8.2
+  provider: ^6.1.2
+  add_to_cart_animation: ^2.0.3
+  badges: ^3.1.1
+  number_paginator: ^0.4.1
 # For information on the generic Dart part of this file, see the
 # following page: https://dart.dev/tools/pub/pubspec
 
